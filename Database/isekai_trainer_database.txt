@@ -47,7 +47,6 @@ INSERT INTO DefaultControls (ActionID, DefaultKey, Description) VALUES
 (7, 'Left Click', 'Use Ability'),
 (8, 'Space bar', 'Jump');
 
-
 -- Create the Player table
 CREATE TABLE Player (
     PlayerId INTEGER PRIMARY KEY,
