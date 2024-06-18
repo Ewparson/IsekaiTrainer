@@ -1,0 +1,278 @@
+-- Create the Actions table
+CREATE TABLE Actions (
+    ActionID INTEGER PRIMARY KEY,
+    ActionName TEXT NOT NULL,
+    Description TEXT NOT NULL
+);
+
+-- Insert data into Actions
+INSERT INTO Actions (ActionID, ActionName, Description) VALUES
+(1, 'DragonicArconisPower', 'This ability is dependent on the equipped Dragonic Arconis. It has three core gameplay functions and styles: Power-Up (increases AD or AP), Support (provides utility like heals and switches), and Defense (takes a defensive stance).'),
+(2, 'SlideOfHandL', 'Quickly cycle through weapons using your left hand. When held in combination with "Cycle Dragonic Arconis", it also cycles through scroll abilities.'),
+(3, 'AutoAttack', 'Indicate your player to start an attack instance. If using a weapon with limited range, start walking towards the target to attack and be in range.'),
+(4, 'SlideOfHandR', 'Quickly cycle through weapons using your right hand. When held in combination with "Cycle Dragonic Arconis", it also cycles through scroll abilities.'),
+(5, 'CycleDragonicArconis', 'Cycle through different Dragonic Arconis abilities. If held, this action enables the use of scroll abilities.'),
+(6, 'Dodge', 'Perform an evasive maneuver to avoid incoming attacks.'),
+(7, 'UseAbility', 'Activate one of your abilities, which adapts to the weapon you are currently wielding.'),
+(8, 'Jump', 'Perform a jump to overcome obstacles or reach higher ground.');
+
+-- Create the ButtonActions table
+CREATE TABLE ButtonActions (
+    ButtonActionID INTEGER PRIMARY KEY,
+    DeviceID INTEGER NOT NULL,
+    ButtonName TEXT NOT NULL,
+    ActionID INTEGER,
+    FOREIGN KEY (DeviceID) REFERENCES InputDevice(DeviceID),
+    FOREIGN KEY (ActionID) REFERENCES Actions(ActionID)
+);
+
+-- Create the DefaultControls table
+CREATE TABLE DefaultControls (
+    ControlID INTEGER PRIMARY KEY,
+    ActionID INTEGER NOT NULL,
+    DefaultKey TEXT NOT NULL,
+    Description TEXT,
+    FOREIGN KEY (ActionID) REFERENCES Actions(ActionID)
+);
+
+
+-- Insert default control mappings into DefaultControls
+INSERT INTO DefaultControls (ActionID, DefaultKey, Description) VALUES
+(1, 'LT Shift', 'Dragonic Arconis Power UP Attack / Substitution Justsu Support / Dragon Transformation Defence'),
+(2, 'LB', 'Cycle Weapon left, Cycles Through Scroll Selection'),
+(3, 'RT Left Click', 'Auto-Attack'),
+(4, 'RT', 'Cycle Weapon Right, Cycles Through Scroll Selection'),
+(5, 'Y, E, R', 'Cycle ScrollAbility, If held Cycles Through Dragonic Arconis'),
+(6, 'X Cn', 'Dodge'),
+(7, 'Left Click', 'Use Ability'),
+(8, 'Space bar', 'Jump');
+
+
+-- Create the Player table
+CREATE TABLE Player (
+    PlayerId INTEGER PRIMARY KEY,
+    PlayerName TEXT UNIQUE NOT NULL,
+    Password TEXT NOT NULL, 
+    Email TEXT UNIQUE NOT NULL, 
+    CreatedAt TIMESTAMP NOT NULL 
+);
+
+-- Create the DonationInformation table
+CREATE TABLE DonationInformation (
+    DonationId INTEGER PRIMARY KEY,
+    PlayerId INTEGER NOT NULL, 
+    CardDetails TEXT NOT NULL, 
+    PaymentDate TIMESTAMP NOT NULL, 
+    Amount INTEGER NOT NULL, 
+    FOREIGN KEY (PlayerId) REFERENCES Player(PlayerId) 
+);
+
+
+-- Create the PlayerCharacter table
+CREATE TABLE PlayerCharacter (
+    PlayerCharacterID INTEGER PRIMARY KEY,
+    PlayerCharacterName TEXT NOT NULL,
+    Health INTEGER,
+    MagicPoints INTEGER,
+    Stamina INTEGER,
+    Heaste INTEGER,
+    Agility INTEGER,
+    AttackDamage INTEGER,
+    CriticalStrike INTEGER,
+    Intelligence INTEGER,
+    Wisdom INTEGER,
+    MagicPenetration INTEGER, 
+    ArmorPenetration INTEGER,
+    Weight INTEGER,
+    LVL INTEGER,
+    EXP INTEGER,
+    ELO INTEGER,
+    ELOTIER TEXT CHECK(ELOTIER IN ('Bronze', 'Silver', 'Gold', 'Plat', 'Diamond'))
+);
+
+-- Create the Game_instance_Table
+CREATE TABLE GameInstanceTable (
+    GameInstanceId INTEGER PRIMARY KEY,
+    PlayerId INTEGER NOT NULL,
+    CharacterName TEXT NOT NULL,
+    BossLvl INTEGER,
+    FOREIGN KEY (PlayerId) REFERENCES Player(PlayerId)
+);
+
+
+-- Create the CombatLog table
+CREATE TABLE CombatLog (
+    CombatLogID INTEGER PRIMARY KEY,
+    AttackerID INTEGER NOT NULL,
+    DefenderID INTEGER NOT NULL,
+    DefenderType TEXT NOT NULL,
+    DamageDealt INTEGER
+);
+
+-- Create the AmunaGPTBossAI table
+CREATE TABLE AmunaGPTBossAI (
+    PlayerCharacterID INTEGER PRIMARY KEY,
+    PlayerCharacterName TEXT NOT NULL,
+    Health INTEGER,
+    MagicPoints INTEGER,
+    Stamina INTEGER,
+    Heaste INTEGER,
+    Agility INTEGER, 
+    AttackDamage INTEGER,
+    CriticalStrike INTEGER, 
+    Intelligence INTEGER, 
+    Wisdom INTEGER, 
+    MagicPenetration INTEGER, 
+    ArmorPenetration INTEGER, 
+    Weight INTEGER, 
+    LVL INTEGER,
+    EXP INTEGER, 
+    ELO INTEGER,
+    ELOTIER TEXT CHECK(ELOTIER IN ('Bronze', 'Silver', 'Gold', 'Plat', 'Diamond'))
+);
+
+-- Create the Abilities table
+CREATE TABLE Abilities (
+    AbilityID INTEGER PRIMARY KEY, 
+    AbilityName TEXT NOT NULL,
+    AbilityType INTEGER NOT NULL,
+    Power INTEGER,
+    Cooldown INTEGER,
+    Description TEXT
+);
+
+-- Insert data into Abilities
+INSERT INTO Abilities (AbilityID, AbilityName, AbilityType, Power, Cooldown, Description) VALUES
+(1, 'DragonFury', 1, NULL, NULL, 'Short range slash combination followed by a flurry of punches'),
+(2, 'BladeDance', 1, NULL, NULL, 'Perform a 3 slash spinning attack damaging all in your path'),
+(3, 'AIsProtoCall', 1, NULL, NULL, 'Your spirit ancestor appears in your front to your aid damaging your enemy'),
+(4, 'SpiningSlash', 1, NULL, NULL, 'Just copy that here'),
+(5, 'FLYINGRYGIN', 1, NULL, NULL, 'Kick your foe up in the air launch yourself right in close range'),
+(6, 'SwiftSlash', 1, NULL, NULL, 'Deliver powerful slashing destruction'),
+(7, 'FLAME BALL', 1, NULL, NULL, 'Develop a massive fire ball that damages your enemy with flames'),
+(8, 'BLIZ N LAUNCH', 1, NULL, NULL, 'Buy something while in the air (2) then the use (E). You can launch (LMB)'),
+(9, 'DRAGON BLESSING', 1, NULL, NULL, 'Channel dragon energy blessing all nearby teammates with dragon power, increasing their attack damage'),
+(10, 'prayer to fire', 1, NULL, NULL, 'A quick range spell adds a fire buff to your (Q) spell'),
+(11, 'kiss of the dragon', 1, NULL, NULL, 'Special shot'),
+(12, 'inflamed talon', 1, NULL, NULL, 'Absorb fire to heal you. Your next attack will burn your enemy causing them to receive damage over time'),
+(13, 'dragon trigger', 1, NULL, NULL, 'Execute move massive close range burst damages your nearby enemies'),
+(14, 'gutz grace', 1, NULL, NULL, 'Gain 3x moves the more health you have the more damage you take'),
+(15, 'bullet storm', 1, NULL, NULL, 'Ranged damage spell'),
+(16, 'reaping sweep', 1, NULL, NULL, 'While in front of an enemy you sweep your legs to knock them down'),
+(17, 'flaming arrow', 1, NULL, NULL, 'Throw a burning arrow that burns over time'),
+(18, 'flame strike', 1, NULL, NULL, 'Fiery strike with flame buff'),
+(19, 'fire burst', 1, NULL, NULL, 'Large blast of fire around you'),
+(20, 'scorched slash', 1, NULL, NULL, 'Fiery scythe slash');
+
+-- Create the ScrollAbility table
+CREATE TABLE ScrollAbility (
+    ScrollAbilityID INTEGER PRIMARY KEY, 
+    ScrollNameID TEXT NOT NULL,
+    ScrollDescriptionID TEXT CHECK(ScrollDescriptionID IN ('1', '2', '3', '4', '5'))
+);
+
+-- Insert data into ScrollAbility
+INSERT INTO ScrollAbility (ScrollAbilityID, ScrollNameID, ScrollDescriptionID) VALUES
+(1, 'FLAMEBREATH', '1'),
+(2, 'TAILLAUNCH', '2'),
+(3, 'EMBUE CLAW', '3'),
+(4, 'EMBUE TALENS', '4'),
+(5, 'TAIL SWEEP', '5');
+
+-- Create the DragonicArconis table
+CREATE TABLE DragonicArconis (
+    DragonicArconisID INTEGER PRIMARY KEY, 
+    DragonicArconisName TEXT NOT NULL,
+    SlotNumber TEXT CHECK(SlotNumber IN ('1', '2', '3'))
+);
+
+-- Insert data into DragonicArconis
+INSERT INTO DragonicArconis (DragonicArconisID, DragonicArconisName, SlotNumber) VALUES
+(1, 'Dragonfury', '1'),
+(2, 'Mech Techia', '2'),
+(3, 'Summoner', '3');
+
+--Create the Weapons
+CREATE TABLE Weapons (
+    WeaponID INT PRIMARY KEY AUTO_INCREMENT,
+    ItemID INT,
+    WeaponType ENUM('SYTH', 'SWORD', 'GUN') NOT NULL,
+    Power INT,
+    Cooldown INT,
+    FOREIGN KEY (ItemID) REFERENCES Items(ItemID)
+);
+
+-- Insert data into Weapons
+INSERT INTO Weapons (ItemID, WeaponType, Power, Cooldown) VALUES
+(1, 'SYTH', 100, 10),
+(2, 'SWORD', 150, 15),
+(3, 'GUN', 200, 20);
+
+
+-- Create the ItemsTable
+CREATE TABLE ItemsTable (
+    ItemID INTEGER PRIMARY KEY, 
+    ItemName TEXT NOT NULL,
+    Category TEXT CHECK(Category IN ('Weapon', 'Hats', 'Accessories', 'Pants', 'Shoes')),
+    Attribute TEXT,
+    Effects TEXT,
+    StatBuff TEXT,
+    BuffValue INTEGER,
+    Description TEXT,
+    Weight INTEGER,
+    Rarity TEXT CHECK(Rarity IN ('gray', 'green', 'blue', 'purple', 'gold'))
+);
+
+-- Insert data into ItemsTable
+INSERT INTO ItemsTable (ItemID, ItemName, Category, Attribute, Effects, StatBuff, BuffValue, Description, Weight, Rarity) VALUES
+(1, 'Earings1', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(2, 'Earings2', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(3, 'Earings3', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(4, 'Earings4', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(5, 'Neckless1', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(6, 'Neckless2', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(7, 'EYEPATCH', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(8, 'MORE BLING', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(9, 'SCARFE', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(10, 'SHORTS', 'Pants', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(11, 'SHORPANTS', 'Pants', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(12, 'PANTS', 'Pants', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(13, 'CLOAK', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(14, 'Robe', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(15, 'GOODPENDENT', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(16, 'SNEAKERS', 'Shoes', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(17, 'BOOTS', 'Shoes', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(18, 'SANDELS', 'Shoes', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(19, 'BLACKHANDCLOTHS', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(20, 'ONEARMGLOVES', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(21, 'MAINGLOVES', 'Accessories', NULL, NULL, NULL, NULL, NULL, NULL, 'gray');
+
+-- Insert data into Weapons
+INSERT INTO ItemsTable (ItemID, ItemName, Category, Attribute, Effects, StatBuff, BuffValue, Description, Weight, Rarity) VALUES
+(22, 'SYTH', 'Weapon', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(23, 'SWORD', 'Weapon', NULL, NULL, NULL, NULL, NULL, NULL, 'gray'),
+(24, 'GUN', 'Weapon', NULL, NULL, NULL, NULL, NULL, NULL, 'gray');
+
+-- Create the Inventory table
+CREATE TABLE Inventory (
+    InventoryID INTEGER PRIMARY KEY, 
+    InventorySlot1 TEXT CHECK(InventorySlot1 IN ('Component1', 'Component2', 'Component3')),
+    InventorySlot2 TEXT CHECK(InventorySlot2 IN ('Component1', 'Component2', 'Component3'))
+);
+
+-- Create the ELO table
+CREATE TABLE ELO (
+    ELOID INTEGER PRIMARY KEY, 
+    ELOScore TEXT NOT NULL,
+    ELOTier INTEGER NOT NULL
+);
+
+-- Create the Equips table
+CREATE TABLE Equips (
+    EquipID INTEGER PRIMARY KEY, 
+    EquipName TEXT,
+    Category TEXT CHECK(Category IN ('Weapon', 'Hats', 'Accessories', 'Pants', 'Shoes')),
+    Item TEXT,
+    Pants TEXT,
+    Shoes TEXT
+);
