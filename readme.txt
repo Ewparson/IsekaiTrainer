@@ -1,0 +1,1 @@
+Save isekai_trainer_database.txt AS .db
