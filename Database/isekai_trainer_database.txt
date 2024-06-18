@@ -1,12 +1,12 @@
--- Create the Actions table
-CREATE TABLE Actions (
-    ActionID INTEGER PRIMARY KEY,
-    ActionName TEXT NOT NULL,
+-- Create the PlayerFunctions table
+CREATE TABLE PlayerFunctions (
+    PlayerFunctionsID INTEGER PRIMARY KEY,
+    PlayerFunctionsName TEXT NOT NULL,
     Description TEXT NOT NULL
 );
 
--- Insert data into Actions
-INSERT INTO Actions (ActionID, ActionName, Description) VALUES
+-- Insert data into PlayerFunctions
+INSERT INTO PlayerFunctions (ActionID, ActionName, Description) VALUES
 (1, 'DragonicArconisPower', 'This ability is dependent on the equipped Dragonic Arconis. It has three core gameplay functions and styles: Power-Up (increases AD or AP), Support (provides utility like heals and switches), and Defense (takes a defensive stance).'),
 (2, 'SlideOfHandL', 'Quickly cycle through weapons using your left hand. When held in combination with "Cycle Dragonic Arconis", it also cycles through scroll abilities.'),
 (3, 'AutoAttack', 'Indicate your player to start an attack instance. If using a weapon with limited range, start walking towards the target to attack and be in range.'),
